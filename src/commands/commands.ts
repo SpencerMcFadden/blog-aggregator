@@ -8,3 +8,12 @@ export async function registerCommand(
 ) {
   registry[cmdName] = handler;
 }
+
+export async function runCommand(registry: CommandsRegistry, cmdName: string, ...args: string[]) {
+  const commandHandler = registry[cmdName];
+  if (!commandHandler) {
+    throw new Error(`command: ${cmdName} not found`);
+  }
+
+  await commandHandler(cmdName, ...args);
+}
