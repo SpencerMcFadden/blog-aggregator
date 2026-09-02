@@ -5,13 +5,20 @@
   "keywords": [],
   "license": "ISC",
   "author": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "tsx ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "postgres": "^3.4.9"
   },
   "devDependencies": {
     "@types/node": "^26.4.0",
+    "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.13",
     "typescript": "^7.0.2"
   }
