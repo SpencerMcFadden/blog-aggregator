@@ -1,11 +1,13 @@
 import { handlerLogin } from "./commands/handler_login.js";
+import { handlerRegister } from "./commands/handler_register.js";
 import { registerCommand } from "./commands/register_command.js";
 import { runCommand } from "./commands/run_command.js";
 import { CommandsRegistry } from "./commands/types/commands_registry.js";
 
-function main() {
+async function main() {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "login", handlerLogin);
+  registerCommand(registry, "register", handlerRegister);
 
   const args = process.argv.slice(2);
   if (args.length < 1) {
@@ -17,11 +19,17 @@ function main() {
   const commands = args.slice(1);
 
   try {
-    runCommand(registry, cmdName, ...commands);
+    await runCommand(registry, cmdName, ...commands);
   } catch (e) {
-    console.log((e as Error).message);
+    if (e instanceof Error) {
+      console.error(`Error running command ${cmdName}: ${e}`);
+    } else {
+      console.error(`Error running command ${cmdName}`);
+    }
     process.exit(1);
   }
+
+  process.exit(0);
 }
 
 main();
