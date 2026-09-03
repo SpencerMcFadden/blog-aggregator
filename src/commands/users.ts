@@ -1,5 +1,5 @@
-import { setUser } from "../config";
-import { getUserByName, createUser, deleteAllUsers } from "../lib/db/queries/users";
+import { readConfig, setUser } from "../config";
+import { getUserByName, createUser, deleteAllUsers, getUsers } from "../lib/db/queries/users";
 
 export async function handlerLogin(cmdName: string, ...args: string[]) {
   if (args.length !== 1) {
@@ -34,4 +34,16 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
 export async function handlerDeleteAll(cmdName: string, ...args: string[]) {
   await deleteAllUsers();
   console.log("all users deleted");
+}
+
+export async function handlerUsers(cmdName: string, ...args: string[]) {
+  const users = await getUsers();
+  const currentUser = readConfig().currentUserName;
+  for (const user of users) {
+    if (user.name === currentUser) {
+      console.log(`* ${user.name} (current)`);
+      continue;
+    }
+    console.log(`* ${user.name}`);
+  }
 }
