@@ -1,6 +1,7 @@
 import { handlerDeleteAll, handlerLogin, handlerRegister, handlerUsers } from "./commands/users.js";
 import { registerCommand, runCommand } from "./commands/commands.js";
 import { CommandsRegistry } from "./commands/types/commands_registry.js";
+import { handleAgg } from "./commands/aggregate.js";
 
 async function main() {
   const registry: CommandsRegistry = {};
@@ -8,6 +9,7 @@ async function main() {
   registerCommand(registry, "register", handlerRegister);
   registerCommand(registry, "reset", handlerDeleteAll);
   registerCommand(registry, "users", handlerUsers);
+  registerCommand(registry, "agg", handleAgg);
 
   const args = process.argv.slice(2);
   if (args.length < 1) {
