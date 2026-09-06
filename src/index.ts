@@ -3,6 +3,7 @@ import { registerCommand, runCommand } from "./commands/commands.js";
 import { CommandsRegistry } from "./commands/types/commands_registry.js";
 import { handleAgg } from "./commands/aggregate.js";
 import { handlerCreateFeed, handlerFeeds } from "./commands/feeds.js";
+import { handlerFollow, handlerFollowing } from "./commands/feed_follows.js";
 
 async function main() {
   const registry: CommandsRegistry = {};
@@ -13,6 +14,8 @@ async function main() {
   registerCommand(registry, "agg", handleAgg);
   registerCommand(registry, "addfeed", handlerCreateFeed);
   registerCommand(registry, "feeds", handlerFeeds);
+  registerCommand(registry, "follow", handlerFollow);
+  registerCommand(registry, "following", handlerFollowing);
 
   const args = process.argv.slice(2);
   if (args.length < 1) {

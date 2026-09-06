@@ -1,4 +1,5 @@
 import { readConfig } from "../config";
+import { createFeedFollow } from "../lib/db/queries/feed_follows";
 import { createFeed, getFeeds } from "../lib/db/queries/feeds";
 import { getUserById, getUserByName } from "../lib/db/queries/users";
 import { Feed, User } from "../lib/db/schema";
@@ -20,9 +21,11 @@ export async function handlerCreateFeed(cmdName: string, ...args: string[]) {
   if (!result) {
     throw new Error(`Failed to create feed`);
   }
+  const follow = await createFeedFollow(currentUser.id, result.id);
 
   console.log(`Created successfully:`);
   printFeed(result, currentUser);
+  console.log(`${currentUser} followed ${follow.feedName}`);
 }
 
 export async function handlerFeeds(_: string) {
