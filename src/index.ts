@@ -3,7 +3,7 @@ import { registerCommand, runCommand } from "./commands/commands.js";
 import { CommandsRegistry } from "./commands/types/commands_registry.js";
 import { handleAgg } from "./commands/aggregate.js";
 import { handlerAddFeed, handlerFeeds } from "./commands/feeds.js";
-import { handlerFollow, handlerFollowing } from "./commands/feed_follows.js";
+import { handlerFollow, handlerFollowing, handlerUnfollow } from "./commands/feed_follows.js";
 import { middlewareLoggedIn } from "./middleware.js";
 
 async function main() {
@@ -17,6 +17,7 @@ async function main() {
   registerCommand(registry, "feeds", handlerFeeds);
   registerCommand(registry, "follow", middlewareLoggedIn(handlerFollow));
   registerCommand(registry, "following", middlewareLoggedIn(handlerFollowing));
+  registerCommand(registry, "unfollow", middlewareLoggedIn(handlerUnfollow));
 
   const args = process.argv.slice(2);
   if (args.length < 1) {

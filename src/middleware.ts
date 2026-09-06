@@ -1,7 +1,7 @@
-import { readConfig } from "../../config";
-import { getUserByName } from "../../lib/db/queries/users";
-import { CommandHandler } from "./command_handler";
-import { UserCommandHandler } from "./user_command_handler";
+import { readConfig } from "./config";
+import { getUserByName } from "./lib/db/queries/users";
+import { CommandHandler } from "./commands/types/command_handler";
+import { UserCommandHandler } from "./commands/types/user_command_handler";
 
 export function middlewareLoggedIn(handler: UserCommandHandler): CommandHandler {
   return async (cmdName: string, ...args: string[]): Promise<void> => {
