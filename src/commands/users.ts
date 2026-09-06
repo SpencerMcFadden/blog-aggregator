@@ -31,7 +31,7 @@ export async function handlerRegister(cmdName: string, ...args: string[]) {
   console.log(`user ${userName} created`);
 }
 
-export async function handlerDeleteAll(cmdName: string, ...args: string[]) {
+export async function handlerReset(cmdName: string, ...args: string[]) {
   await deleteAllUsers();
   console.log("all users deleted");
 }

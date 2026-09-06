@@ -1,31 +1,24 @@
-import { readConfig } from "../config";
 import { createFeedFollow } from "../lib/db/queries/feed_follows";
 import { createFeed, getFeeds } from "../lib/db/queries/feeds";
-import { getUserById, getUserByName } from "../lib/db/queries/users";
+import { getUserById } from "../lib/db/queries/users";
 import { Feed, User } from "../lib/db/schema";
 
-export async function handlerCreateFeed(cmdName: string, ...args: string[]) {
+export async function handlerAddFeed(cmdName: string, user: User, ...args: string[]) {
   if (args.length !== 2) {
     throw new Error(`usage: ${cmdName} <name> <url>`);
   }
   const feedName = args[0];
   const feedURL = args[1];
-  const currentUsername = readConfig().currentUserName;
-  const currentUser = await getUserByName(currentUsername);
 
-  if (!currentUser) {
-    throw new Error("Failed to determine current user");
-  }
-
-  const result = await createFeed(feedName, feedURL, currentUser.id);
+  const result = await createFeed(feedName, feedURL, user.id);
   if (!result) {
     throw new Error(`Failed to create feed`);
   }
-  const follow = await createFeedFollow(currentUser.id, result.id);
+  const follow = await createFeedFollow(user.id, result.id);
 
   console.log(`Created successfully:`);
-  printFeed(result, currentUser);
-  console.log(`${currentUser} followed ${follow.feedName}`);
+  printFeed(result, user);
+  console.log(`${user.name} followed ${follow.feedName}`);
 }
 
 export async function handlerFeeds(_: string) {

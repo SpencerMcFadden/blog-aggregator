@@ -1,21 +1,22 @@
-import { handlerDeleteAll, handlerLogin, handlerRegister, handlerUsers } from "./commands/users.js";
+import { handlerLogin, handlerRegister, handlerReset, handlerUsers } from "./commands/users.js";
 import { registerCommand, runCommand } from "./commands/commands.js";
 import { CommandsRegistry } from "./commands/types/commands_registry.js";
 import { handleAgg } from "./commands/aggregate.js";
-import { handlerCreateFeed, handlerFeeds } from "./commands/feeds.js";
+import { handlerAddFeed, handlerFeeds } from "./commands/feeds.js";
 import { handlerFollow, handlerFollowing } from "./commands/feed_follows.js";
+import { middlewareLoggedIn } from "./middleware.js";
 
 async function main() {
   const registry: CommandsRegistry = {};
   registerCommand(registry, "login", handlerLogin);
   registerCommand(registry, "register", handlerRegister);
-  registerCommand(registry, "reset", handlerDeleteAll);
+  registerCommand(registry, "reset", handlerReset);
   registerCommand(registry, "users", handlerUsers);
   registerCommand(registry, "agg", handleAgg);
-  registerCommand(registry, "addfeed", handlerCreateFeed);
+  registerCommand(registry, "addfeed", middlewareLoggedIn(handlerAddFeed));
   registerCommand(registry, "feeds", handlerFeeds);
-  registerCommand(registry, "follow", handlerFollow);
-  registerCommand(registry, "following", handlerFollowing);
+  registerCommand(registry, "follow", middlewareLoggedIn(handlerFollow));
+  registerCommand(registry, "following", middlewareLoggedIn(handlerFollowing));
 
   const args = process.argv.slice(2);
   if (args.length < 1) {
