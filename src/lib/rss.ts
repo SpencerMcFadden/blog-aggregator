@@ -1,5 +1,6 @@
 import { XMLParser } from "fast-xml-parser";
 import { getNextFeedToFetch, markFeedFetched } from "./db/queries/feeds";
+import { createPost } from "./db/queries/posts";
 
 export async function fetchFeed(feedURL: string) {
   const response = await fetch(feedURL, {
@@ -63,14 +64,20 @@ export async function scrapeFeeds() {
     console.log(`Could not determine next feed to fetch`);
     return;
   }
-  const fetchedFeed = await fetchFeed(nextFeed.url);
-  const markSuccess = await markFeedFetched(nextFeed.id);
+  const feedId = nextFeed.id;
+  const markSuccess = await markFeedFetched(feedId);
   if (!markSuccess) {
-    throw new Error(`Failed to mark feed: ${nextFeed.id}`);
+    throw new Error(`Failed to mark feed: ${feedId}`);
   }
+  const fetchedFeed = await fetchFeed(nextFeed.url);
 
   for (const item of fetchedFeed.channel.item) {
-    console.log(` * ${item.title}`);
+    try {
+      await createPost(item.title, item.link, feedId, item.description, new Date(item.pubDate));
+    } catch (e) {
+      console.error(`Post failed to save: ${(e as Error).message}`);
+      continue;
+    }
   }
 
   console.log(

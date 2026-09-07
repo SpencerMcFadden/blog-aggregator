@@ -29,6 +29,13 @@
       "when": 1788727258966,
       "tag": "0003_living_green_goblin",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1788735317822,
+      "tag": "0004_lowly_the_stranger",
+      "breakpoints": true
     }
   ]
 }
